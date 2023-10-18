@@ -20,7 +20,7 @@ public class RouteConfiguration {
     private String feedbackCollectorUrl;
 
     @Bean
-    public RouteLocator myRoutes(RouteLocatorBuilder builder) {
+    public RouteLocator routeLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 // Available to everyone (with rate limits and captcha)
                 .route(r -> r
@@ -32,11 +32,11 @@ public class RouteConfiguration {
                 .route(r -> r
                         .path("/feedback")
                         .and()
-                        .method(HttpMethod.POST)
+                        .method(HttpMethod.POST, HttpMethod.OPTIONS)
                         .filters(f -> f
                                 .setPath("/api/v1/feedback")
                                 .requestRateLimiter(c -> c
-                                        .setRateLimiter(redisStrictRateLimiter())
+                                        .setRateLimiter(strictRedisRateLimiter())
                                         .setKeyResolver(clientAddressResolver)))
                         .uri(feedbackCollectorUrl))
                 // Available only to admins
@@ -51,7 +51,7 @@ public class RouteConfiguration {
     }
 
     @Bean
-    public RedisRateLimiter redisStrictRateLimiter() {
+    public RedisRateLimiter strictRedisRateLimiter() {
         return new RedisRateLimiter(1, 10, 10);
     }
 }
