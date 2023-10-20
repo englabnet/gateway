@@ -1,8 +1,17 @@
 server.port: 8080
+server.error.include-message: always
 
 gateway:
-  context-searcher.url: "http://localhost:8081"
-  feedback-collector.url: "http://localhost:8082"
+  frontend:
+    url: ${FRONTEND_URL}
+  context-searcher:
+    url: ${CONTEXT_SEARCHER_URL}
+  feedback-collector:
+    url: ${FEEDBACK_COLLECTOR_URL}
+
+  recaptcha:
+    secret-key: ${RECAPTCHA_SECRET_KEY}
+    verify-url: "https://www.google.com/recaptcha/api/siteverify"
 
 spring:
   cloud:
@@ -10,7 +19,7 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: 'http://localhost:5173/'
+            allowedOrigins: ${gateway.frontend.url}
             allowedMethods:
               - GET
               - POST

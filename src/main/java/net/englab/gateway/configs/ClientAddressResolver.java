@@ -1,4 +1,4 @@
-package net.englab.gateway;
+package net.englab.gateway.configs;
 
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.stereotype.Component;

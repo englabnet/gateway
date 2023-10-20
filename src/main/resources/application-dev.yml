@@ -1,0 +1,7 @@
+gateway:
+  frontend:
+    url: 'http://localhost:5173'
+  context-searcher:
+    url: 'http://localhost:8081'
+  feedback-collector:
+    url: 'http://localhost:8082'

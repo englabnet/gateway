@@ -1,6 +1,7 @@
-package net.englab.gateway;
+package net.englab.gateway.configs;
 
 import lombok.RequiredArgsConstructor;
+import net.englab.gateway.filters.RecaptchaFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.RouteLocator;
@@ -20,7 +21,7 @@ public class RouteConfiguration {
     private String feedbackCollectorUrl;
 
     @Bean
-    public RouteLocator routeLocator(RouteLocatorBuilder builder) {
+    public RouteLocator routeLocator(RouteLocatorBuilder builder, RecaptchaFilter recaptchaFilter) {
         return builder.routes()
                 // Available to everyone (with rate limits and captcha)
                 .route(r -> r
@@ -35,6 +36,7 @@ public class RouteConfiguration {
                         .method(HttpMethod.POST, HttpMethod.OPTIONS)
                         .filters(f -> f
                                 .setPath("/api/v1/feedback")
+                                .filter(recaptchaFilter)
                                 .requestRateLimiter(c -> c
                                         .setRateLimiter(strictRedisRateLimiter())
                                         .setKeyResolver(clientAddressResolver)))
@@ -52,6 +54,7 @@ public class RouteConfiguration {
 
     @Bean
     public RedisRateLimiter strictRedisRateLimiter() {
-        return new RedisRateLimiter(1, 10, 10);
+        // 5 requests per 10 minutes
+        return new RedisRateLimiter(1, 60 * 10, 60 * 2);
     }
 }
