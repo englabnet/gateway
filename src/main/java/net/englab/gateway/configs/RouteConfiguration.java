@@ -25,17 +25,17 @@ public class RouteConfiguration {
         return builder.routes()
                 // Available to everyone (with rate limits and captcha)
                 .route(r -> r
-                        .path("/search")
+                        .path("/api/v1/search")
+                        .and()
+                        .method(HttpMethod.GET)
                         .filters(f -> f
-                                .setPath("/api/v1/searcher/search")
                                 .requestRateLimiter(c -> c.setKeyResolver(clientAddressResolver)))
                         .uri(contextSearcherUrl))
                 .route(r -> r
-                        .path("/feedback")
+                        .path("/api/v1/feedback")
                         .and()
                         .method(HttpMethod.POST, HttpMethod.OPTIONS)
                         .filters(f -> f
-                                .setPath("/api/v1/feedback")
                                 .filter(recaptchaFilter)
                                 .requestRateLimiter(c -> c
                                         .setRateLimiter(strictRedisRateLimiter())
