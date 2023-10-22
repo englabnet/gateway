@@ -8,12 +8,18 @@ gateway:
     url: ${CONTEXT_SEARCHER_URL}
   feedback-collector:
     url: ${FEEDBACK_COLLECTOR_URL}
+  admin-console:
+    url: ${ADMIN_CONSOLE_URL}
 
   recaptcha:
     secret-key: ${RECAPTCHA_SECRET_KEY}
-    verify-url: "https://www.google.com/recaptcha/api/siteverify"
+    verify-url: 'https://www.google.com/recaptcha/api/siteverify'
 
 spring:
+  security:
+    user:
+      name: ${SECURITY_USERNAME}
+      password: ${SECURITY_PASSWORD}
   cloud:
     gateway:
       globalcors:

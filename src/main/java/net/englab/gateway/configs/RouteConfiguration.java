@@ -19,6 +19,8 @@ public class RouteConfiguration {
     private String contextSearcherUrl;
     @Value("${gateway.feedback-collector.url}")
     private String feedbackCollectorUrl;
+    @Value("${gateway.admin-console.url}")
+    private String adminConsoleUrl;
 
     @Bean
     public RouteLocator routeLocator(RouteLocatorBuilder builder, RecaptchaFilter recaptchaFilter) {
@@ -34,7 +36,7 @@ public class RouteConfiguration {
                 .route(r -> r
                         .path("/api/v1/feedback")
                         .and()
-                        .method(HttpMethod.POST, HttpMethod.OPTIONS)
+                        .method(HttpMethod.POST)
                         .filters(f -> f
                                 .filter(recaptchaFilter)
                                 .requestRateLimiter(c -> c
@@ -42,13 +44,22 @@ public class RouteConfiguration {
                                         .setKeyResolver(clientAddressResolver)))
                         .uri(feedbackCollectorUrl))
                 // Available only to admins
-                // ...
+                .route(r -> r
+                        .path("/admin-console/**")
+                        .and()
+                        .method(HttpMethod.GET)
+                        .filters(f -> f.rewritePath("/admin-console", "/"))
+                        .uri(adminConsoleUrl))
+                .route(r -> r
+                        .path("/api/v1/indexer/**")
+                        .uri(contextSearcherUrl))
                 .build();
     }
 
     @Bean
     @Primary
     public RedisRateLimiter redisRateLimiter() {
+        // 1 request per second
         return new RedisRateLimiter(1, 1, 1);
     }
 

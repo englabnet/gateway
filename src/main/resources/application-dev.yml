@@ -5,3 +5,11 @@ gateway:
     url: 'http://localhost:8081'
   feedback-collector:
     url: 'http://localhost:8082'
+  admin-console:
+    url: 'http://localhost:5174'
+
+spring:
+  security:
+    user:
+      name: 'admin'
+      password: 'password'
