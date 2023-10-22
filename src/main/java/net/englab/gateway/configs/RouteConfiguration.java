@@ -36,7 +36,7 @@ public class RouteConfiguration {
                 .route(r -> r
                         .path("/api/v1/feedback")
                         .and()
-                        .method(HttpMethod.POST)
+                        .method(HttpMethod.POST, HttpMethod.OPTIONS)
                         .filters(f -> f
                                 .filter(recaptchaFilter)
                                 .requestRateLimiter(c -> c

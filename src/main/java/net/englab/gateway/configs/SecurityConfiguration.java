@@ -21,6 +21,8 @@ public class SecurityConfiguration {
                         .permitAll()
                         .pathMatchers(HttpMethod.POST, "/api/v1/feedback")
                         .permitAll()
+                        .pathMatchers(HttpMethod.OPTIONS, "/api/v1/feedback")
+                        .permitAll()
                         .anyExchange()
                         .authenticated()
                 )
