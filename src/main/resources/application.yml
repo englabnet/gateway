@@ -2,8 +2,6 @@ server.port: 8080
 server.error.include-message: always
 
 gateway:
-  frontend:
-    url: ${FRONTEND_URL}
   context-searcher:
     url: ${CONTEXT_SEARCHER_URL}
   feedback-collector:
@@ -25,7 +23,8 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: ${gateway.frontend.url}
+            allowedOrigins:
+            - https://englab.net
             allowedMethods:
               - GET
               - POST
