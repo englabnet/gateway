@@ -53,6 +53,9 @@ public class RouteConfiguration {
                 .route(r -> r
                         .path("/api/v1/indexer/**")
                         .uri(contextSearcherUrl))
+                .route(r -> r
+                        .path("/api/v1/videos/**")
+                        .uri(contextSearcherUrl))
                 .build();
     }
 
