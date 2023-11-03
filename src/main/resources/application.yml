@@ -10,6 +10,7 @@ gateway:
     url: ${ADMIN_CONSOLE_URL}
 
   recaptcha:
+    enabled: true
     secret-key: ${RECAPTCHA_SECRET_KEY}
     verify-url: 'https://www.google.com/recaptcha/api/siteverify'
 

@@ -6,6 +6,9 @@ gateway:
   admin-console:
     url: 'http://localhost:5174'
 
+  recaptcha:
+    enabled: false
+
 spring:
   security:
     user:

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.englab.gateway.models.RecaptchaResponse;
 import net.englab.gateway.services.RecaptchaService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,14 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class RecaptchaFilter implements GatewayFilter {
     private final RecaptchaService recaptchaService;
+    @Value("${gateway.recaptcha.enabled}")
+    private boolean enabled;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        if (!enabled) {
+            return chain.filter(exchange);
+        }
         var request = exchange.getRequest();
         String recaptchaToken = request.getHeaders().getFirst("recaptcha");
         if (!StringUtils.hasText(recaptchaToken)) {
