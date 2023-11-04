@@ -52,8 +52,7 @@ public class RouteConfiguration {
                         .uri(adminConsoleUrl))
                 .route(r -> r
                         .path("/api/v1/indexer/**")
-                        .uri(contextSearcherUrl))
-                .route(r -> r
+                        .or()
                         .path("/api/v1/videos/**")
                         .uri(contextSearcherUrl))
                 .route(r -> r
