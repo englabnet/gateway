@@ -27,36 +27,40 @@ public class RouteConfiguration {
         return builder.routes()
                 // Available to everyone (with rate limits and captcha)
                 .route(r -> r
-                        .path("/api/v1/search")
+                        .path("/public/api/v1/search")
                         .and()
                         .method(HttpMethod.GET)
                         .filters(f -> f
-                                .requestRateLimiter(c -> c.setKeyResolver(clientAddressResolver)))
+                                .requestRateLimiter(c -> c.setKeyResolver(clientAddressResolver))
+                                .rewritePath("/public", "/"))
                         .uri(contextSearcherUrl))
                 .route(r -> r
-                        .path("/api/v1/feedback")
+                        .path("/public/api/v1/feedback")
                         .and()
                         .method(HttpMethod.POST, HttpMethod.OPTIONS)
                         .filters(f -> f
                                 .filter(recaptchaFilter)
                                 .requestRateLimiter(c -> c
                                         .setRateLimiter(strictRedisRateLimiter())
-                                        .setKeyResolver(clientAddressResolver)))
+                                        .setKeyResolver(clientAddressResolver))
+                                .rewritePath("/public", "/"))
                         .uri(feedbackCollectorUrl))
                 // Available only to admins
                 .route(r -> r
-                        .path("/admin-console/**")
+                        .path("/admin/admin-console/**")
                         .and()
                         .method(HttpMethod.GET)
-                        .filters(f -> f.rewritePath("/admin-console", "/"))
+                        .filters(f -> f.rewritePath("/admin/admin-console", "/"))
                         .uri(adminConsoleUrl))
                 .route(r -> r
-                        .path("/api/v1/indexer/**")
+                        .path("/admin/api/v1/indexer/**")
                         .or()
-                        .path("/api/v1/videos/**")
+                        .path("/admin/api/v1/videos/**")
+                        .filters(f -> f.rewritePath("/admin", "/"))
                         .uri(contextSearcherUrl))
                 .route(r -> r
-                        .path("/api/v1/feedback/**")
+                        .path("/admin/api/v1/feedback/**")
+                        .filters(f -> f.rewritePath("/admin", "/"))
                         .uri(feedbackCollectorUrl))
                 .build();
     }
