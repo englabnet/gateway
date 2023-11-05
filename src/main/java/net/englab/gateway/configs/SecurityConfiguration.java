@@ -26,8 +26,7 @@ public class SecurityConfiguration {
                         .anyExchange()
                         .authenticated()
                 )
-                .httpBasic(withDefaults())
-                .formLogin(withDefaults());
+                .httpBasic(withDefaults());
         return http.build();
     }
 }
