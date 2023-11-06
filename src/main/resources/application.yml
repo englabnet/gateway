@@ -15,6 +15,9 @@ gateway:
     verify-url: 'https://www.google.com/recaptcha/api/siteverify'
 
 spring:
+  data:
+    redis:
+      host: ${REDIS_HOST}
   security:
     user:
       name: ${SECURITY_USERNAME}
