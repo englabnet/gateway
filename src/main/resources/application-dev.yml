@@ -10,6 +10,9 @@ gateway:
     enabled: false
 
 spring:
+  data:
+    redis:
+      host: localhost
   security:
     user:
       name: 'admin'
