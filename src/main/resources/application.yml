@@ -29,6 +29,7 @@ spring:
           '[/**]':
             allowedOrigins:
             - https://englab.net
+            - https://www.englab.net
             - https://admin.englab.net
             allowedMethods:
               - GET
