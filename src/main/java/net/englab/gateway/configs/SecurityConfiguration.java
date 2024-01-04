@@ -19,6 +19,10 @@ public class SecurityConfiguration {
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.GET, "/public/api/v1/search")
                         .permitAll()
+                        .pathMatchers(HttpMethod.GET, "/public/api/v1/tests/**")
+                        .permitAll()
+                        .pathMatchers(HttpMethod.GET, "/public/api/v1/media/**")
+                        .permitAll()
                         .pathMatchers(HttpMethod.POST, "/public/api/v1/feedback")
                         .permitAll()
                         .pathMatchers(HttpMethod.OPTIONS, "/public/api/v1/feedback")

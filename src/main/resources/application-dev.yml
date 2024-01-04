@@ -1,6 +1,8 @@
 gateway:
   context-searcher:
     url: 'http://localhost:8081'
+  spelling-trainer:
+    url: 'http://localhost:8083'
   feedback-collector:
     url: 'http://localhost:8082'
   admin-console:

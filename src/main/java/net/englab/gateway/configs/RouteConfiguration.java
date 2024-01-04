@@ -17,6 +17,8 @@ public class RouteConfiguration {
     private final ClientAddressResolver clientAddressResolver;
     @Value("${gateway.context-searcher.url}")
     private String contextSearcherUrl;
+    @Value("${gateway.spelling-trainer.url}")
+    private String spellingTrainerUrl;
     @Value("${gateway.feedback-collector.url}")
     private String feedbackCollectorUrl;
     @Value("${gateway.admin-console.url}")
@@ -34,6 +36,18 @@ public class RouteConfiguration {
                                 .requestRateLimiter(c -> c.setKeyResolver(clientAddressResolver))
                                 .rewritePath("/public", "/"))
                         .uri(contextSearcherUrl))
+                .route(r -> r
+                        .path("/public/api/v1/tests/**")
+                        .and()
+                        .method(HttpMethod.GET)
+                        .or()
+                        .path("/public/api/v1/media/**")
+                        .and()
+                        .method(HttpMethod.GET)
+                        .filters(f -> f
+                                .requestRateLimiter(c -> c.setKeyResolver(clientAddressResolver))
+                                .rewritePath("/public", "/"))
+                        .uri(spellingTrainerUrl))
                 .route(r -> r
                         .path("/public/api/v1/feedback")
                         .and()

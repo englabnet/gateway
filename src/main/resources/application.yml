@@ -4,6 +4,8 @@ server.error.include-message: always
 gateway:
   context-searcher:
     url: ${CONTEXT_SEARCHER_URL}
+  spelling-trainer:
+    url: ${SPELLING_TRAINER_URL}
   feedback-collector:
     url: ${FEEDBACK_COLLECTOR_URL}
   admin-console:
