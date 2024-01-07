@@ -44,8 +44,23 @@ public class RouteConfiguration {
                         .path("/public/api/v1/media/**")
                         .and()
                         .method(HttpMethod.GET)
+                        .or()
+                        .path("/public/api/v1/words/**")
+                        .and()
+                        .method(HttpMethod.GET)
                         .filters(f -> f
                                 .requestRateLimiter(c -> c.setKeyResolver(clientAddressResolver))
+                                .rewritePath("/public", "/"))
+                        .uri(spellingTrainerUrl))
+                .route(r -> r
+                        .path("/public/api/v1/tests")
+                        .and()
+                        .method(HttpMethod.POST, HttpMethod.OPTIONS)
+                        .filters(f -> f
+                                .filter(recaptchaFilter)
+                                .requestRateLimiter(c -> c
+                                        .setRateLimiter(strictRedisRateLimiter())
+                                        .setKeyResolver(clientAddressResolver))
                                 .rewritePath("/public", "/"))
                         .uri(spellingTrainerUrl))
                 .route(r -> r
