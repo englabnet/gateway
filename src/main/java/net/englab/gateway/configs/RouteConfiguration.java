@@ -41,16 +41,19 @@ public class RouteConfiguration {
                         .and()
                         .method(HttpMethod.GET)
                         .or()
-                        .path("/public/api/v1/media/**")
-                        .and()
-                        .method(HttpMethod.GET)
-                        .or()
                         .path("/public/api/v1/words/**")
                         .and()
                         .method(HttpMethod.GET)
                         .filters(f -> f
                                 .requestRateLimiter(c -> c.setKeyResolver(clientAddressResolver))
                                 .rewritePath("/public", "/"))
+                        .uri(spellingTrainerUrl))
+                // we don't want to have any rate limiters when we access media
+                .route(r -> r
+                        .path("/public/api/v1/media/**")
+                        .and()
+                        .method(HttpMethod.GET)
+                        .filters(f -> f.rewritePath("/public", "/"))
                         .uri(spellingTrainerUrl))
                 .route(r -> r
                         .path("/public/api/v1/tests")
