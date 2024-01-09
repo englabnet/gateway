@@ -8,7 +8,6 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 
 @Configuration
@@ -48,6 +47,15 @@ public class RouteConfiguration {
                                 .requestRateLimiter(c -> c.setKeyResolver(clientAddressResolver))
                                 .rewritePath("/public", "/"))
                         .uri(spellingTrainerUrl))
+                .route(r -> r
+                        .path("/public/api/v1/tests")
+                        .and()
+                        .method(HttpMethod.POST, HttpMethod.OPTIONS)
+                        .filters(f -> f
+                                .filter(recaptchaFilter)
+                                .requestRateLimiter(c -> c.setKeyResolver(clientAddressResolver))
+                                .rewritePath("/public", "/"))
+                        .uri(spellingTrainerUrl))
                 // we don't want to have any rate limiters when we access media
                 .route(r -> r
                         .path("/public/api/v1/media/**")
@@ -56,25 +64,12 @@ public class RouteConfiguration {
                         .filters(f -> f.rewritePath("/public", "/"))
                         .uri(spellingTrainerUrl))
                 .route(r -> r
-                        .path("/public/api/v1/tests")
-                        .and()
-                        .method(HttpMethod.POST, HttpMethod.OPTIONS)
-                        .filters(f -> f
-                                .filter(recaptchaFilter)
-                                .requestRateLimiter(c -> c
-                                        .setRateLimiter(strictRedisRateLimiter())
-                                        .setKeyResolver(clientAddressResolver))
-                                .rewritePath("/public", "/"))
-                        .uri(spellingTrainerUrl))
-                .route(r -> r
                         .path("/public/api/v1/feedback")
                         .and()
                         .method(HttpMethod.POST, HttpMethod.OPTIONS)
                         .filters(f -> f
                                 .filter(recaptchaFilter)
-                                .requestRateLimiter(c -> c
-                                        .setRateLimiter(strictRedisRateLimiter())
-                                        .setKeyResolver(clientAddressResolver))
+                                .requestRateLimiter(c -> c.setKeyResolver(clientAddressResolver))
                                 .rewritePath("/public", "/"))
                         .uri(feedbackCollectorUrl))
                 // Available only to admins
@@ -98,15 +93,8 @@ public class RouteConfiguration {
     }
 
     @Bean
-    @Primary
     public RedisRateLimiter redisRateLimiter() {
         // 3 requests per second
         return new RedisRateLimiter(3, 3, 1);
-    }
-
-    @Bean
-    public RedisRateLimiter strictRedisRateLimiter() {
-        // 5 requests per 10 minutes
-        return new RedisRateLimiter(1, 60 * 10, 60 * 2);
     }
 }
