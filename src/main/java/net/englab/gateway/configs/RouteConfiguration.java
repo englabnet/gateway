@@ -18,6 +18,8 @@ public class RouteConfiguration {
     private String contextSearcherUrl;
     @Value("${gateway.spelling-trainer.url}")
     private String spellingTrainerUrl;
+    @Value("${gateway.minio.url}")
+    private String minioUrl;
     @Value("${gateway.feedback-collector.url}")
     private String feedbackCollectorUrl;
     @Value("${gateway.admin-console.url}")
@@ -61,8 +63,8 @@ public class RouteConfiguration {
                         .path("/public/api/v1/media/**")
                         .and()
                         .method(HttpMethod.GET)
-                        .filters(f -> f.rewritePath("/public", "/"))
-                        .uri(spellingTrainerUrl))
+                        .filters(f -> f.rewritePath("/public/api/v1/media/", "/"))
+                        .uri(minioUrl))
                 .route(r -> r
                         .path("/public/api/v1/feedback")
                         .and()

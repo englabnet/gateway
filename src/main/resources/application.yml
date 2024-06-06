@@ -6,6 +6,8 @@ gateway:
     url: ${CONTEXT_SEARCHER_URL}
   spelling-trainer:
     url: ${SPELLING_TRAINER_URL}
+  minio:
+    url: ${MINIO_URL}
   feedback-collector:
     url: ${FEEDBACK_COLLECTOR_URL}
   admin-console:

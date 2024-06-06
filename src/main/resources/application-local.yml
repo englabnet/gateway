@@ -3,6 +3,8 @@ gateway:
     url: 'http://localhost:8081'
   spelling-trainer:
     url: 'http://localhost:8083'
+  minio:
+    url: 'http://localhost:9000'
   feedback-collector:
     url: 'http://localhost:8082'
   admin-console:
