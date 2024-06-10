@@ -1,4 +1,6 @@
 gateway:
+  indexer:
+    url: 'http://localhost:8084'
   context-searcher:
     url: 'http://localhost:8081'
   spelling-trainer:

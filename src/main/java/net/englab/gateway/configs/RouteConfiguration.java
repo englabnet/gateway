@@ -14,6 +14,8 @@ import org.springframework.http.HttpMethod;
 @RequiredArgsConstructor
 public class RouteConfiguration {
     private final ClientAddressResolver clientAddressResolver;
+    @Value("${gateway.indexer.url}")
+    private String indexerUrl;
     @Value("${gateway.context-searcher.url}")
     private String contextSearcherUrl;
     @Value("${gateway.spelling-trainer.url}")
@@ -86,7 +88,7 @@ public class RouteConfiguration {
                         .or()
                         .path("/admin/api/v1/videos/**")
                         .filters(f -> f.rewritePath("/admin", "/"))
-                        .uri(contextSearcherUrl))
+                        .uri(indexerUrl))
                 .route(r -> r
                         .path("/admin/api/v1/feedback/**")
                         .filters(f -> f.rewritePath("/admin", "/"))

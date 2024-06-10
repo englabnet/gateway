@@ -2,6 +2,8 @@ server.port: 8080
 server.error.include-message: always
 
 gateway:
+  indexer:
+    url: ${INDEXER_URL}
   context-searcher:
     url: ${CONTEXT_SEARCHER_URL}
   spelling-trainer:
